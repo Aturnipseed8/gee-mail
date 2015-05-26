@@ -1,0 +1,183 @@
+<!--
+    GeeMail App
+    Turnipseed Style
+-->
+
+
+<html>
+
+    <head>
+
+        <title>GeeMail App</title>
+
+        <!--JavaScript Source-->
+
+        <script src="js/mail-generator.js"></script>
+
+        <!--CSS Source-->
+        <!--Used Google Font - Lato - for CSS in general-->
+        
+        <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"> 
+
+        <!-- JavaScript Start-->
+
+        <script>
+            window.onload = function(){
+            
+                // ALL OF YOUR JAVASCRIPT CODE SHOULD GO HERE. 
+                // We have to use window.onload so your JavaScript doesn't execute until the page has loaded and all HTML has been downloaded to your browser
+                        //**Fair enough. That sounds important.
+                    /* 
+                        3. When your page loads, via JavaScript access our prepopulated data stored in the `window.geemails` variable. Each object in the array has the following properties:
+                            * date - The date message was sent
+                            * subject - The subject of the message
+                            * sender - The sender of the message
+                            * body - The GeeMail message content
+                    */
+                    // accessing prepopulated data in the window.geemails variable
+                    
+                    for (var i = 0; i < window.geemails.length; i++) {
+                        
+                        var subjectLine = getEmail(window.geemails[i]);
+                    
+                        var eachEmail = document.getElementById("main");
+                        
+                        eachEmail.appendChild(subjectLine);
+                        
+                        console.log(window.geemails[i]);
+                    
+                    }
+                    /* 
+                        5. Gotta get dat Inbox count.
+                    */
+                    // declaring variable called total and assigning it to div id of 'total' - will be used to hold text value of total # of emails
+                    var total = document.getElementById("total");
+                    // declaring variable called theTotal that can be constantly added on to in upcoming functions and therefore updated - this will keep track of how many emails there are in total
+                    
+                    var theTotal = window.geemails.length;
+                    // declaring variable called counter and assigning it to text value of the total number of emails in window.geemails variable - which is stored in theTotal variable
+                    
+                    var counter = document.createTextNode(theTotal);
+                    // appending counter to total - so that total # of emails is shown in div id called 'total'
+                    
+                    total.appendChild(counter);
+                /*
+                    6. Set a recurring function with `setInterval` function that will call `getNewMessage` function that we have created for you that will return a newly created message with the same properties as your previous messages.
+                 */
+        
+                function eachInterval(){
+                    // using pre-defined function to initalize newMessage variable to getNewMessage function
+                    var newMessage = getNewMessage();
+                    
+                    // using pre-defined function to initalize subjectLine variable to getEmail function with a parameter of newMessage
+                    
+                    var subjectLine = getEmail(newMessage);
+                    // using pre-defined div id provided (main) to initalize subjectLine variable to getNewMessage function
+                    
+                    var entireMessage = document.getElementById("main");
+                    
+                    // appending the subjectLine already grabbed to entireMessage
+                    
+                    entireMessage.appendChild(subjectLine);
+                    
+                    // updating the number of emails by one for each interval
+                    
+                    theTotal++;
+                    // updating text as well to coincide with theTotal
+                    
+                    total.innerHTML = theTotal;
+                    
+                    // printing out new subjectLine as well 
+                    
+                    console.log(subjectLine);
+                };
+                // setting the Interval to 7000, so every 7 seconds
+                setInterval(eachInterval, 7000);
+            }
+            // getting text function with class name
+            function getText(text, theClass) {
+                
+                // make a div to represent the text block of the email
+                
+                var textBlock = document.createElement("div");
+                
+                var actualText = document.createTextNode(text);
+                
+                textBlock.className += theClass; 
+                
+                textBlock.appendChild(actualText);  
+                
+                // print out textBlock with all the text
+                
+                return textBlock;
+            };
+            function getEmail(message){
+                
+                var subjectLine = document.createElement("div");
+        
+                var date = getText(message["date"], "theDate");
+                
+                var sender = getText(message["sender"], "theSender");
+                
+                var subject = getText(message["subject"], "theSubject");
+            
+                var body = getText(message["body"], "theBody hideMe");
+                
+                subjectLine.className += 'subjectLine';
+                subjectLine.appendChild(sender);
+                subjectLine.appendChild(subject);
+                subjectLine.appendChild(date);
+                subjectLine.appendChild(body);
+                // when clicking on a message you must provide some method of showing the message for that row
+                
+                subjectLine.addEventListener("click", function(){ 
+                    
+                    // printing subjectLine 
+                    
+                    console.log(this);
+                    
+                    // creating variable bodyToggle that will get element body
+                    var bodyToggle = this.getElementsByClassName("theBody");
+                    
+                    // revealing body when clicked on
+                    bodyToggle[0].classList.toggle('hideMe');
+                    
+                    // printing message out
+                    
+                    console.log(body);
+                
+                })
+                
+                // returning email text
+                return subjectLine;
+            
+            };
+        </script>
+
+    </head>
+
+    <body>
+        
+        <div class="header">
+            
+            <!--
+                Gmail Icon- linkadink to Github
+            -->
+            <a href="https://github.com/Aturnipseed8/gee-mail">
+                <img src="https://lh6.ggpht.com/8-N_qLXgV-eNDQINqTR-Pzu5Y8DuH0Xjz53zoWq_IcBNpcxDL_gK4uS_MvXH00yN6nd4=w300" style="width: 100px;height:100px" alt="GeeMail GitHub Repo">
+            </a>
+
+            <!--
+                Displaying total Inbox Count along with app name
+            -->
+
+            <h1>GeeMail Inbox (<span id="total"></span>)</h1>
+        
+        </div>
+                
+        <div class="container" id="main"></div> 
+        
+    </body>
+
+</html>
